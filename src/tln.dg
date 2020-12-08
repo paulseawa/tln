@@ -1,0 +1,599 @@
+(story title)   The Long Nap
+(story author)  Paul Michael Winters
+(story blurb)   Sometimes it's better to not wake up from a nap.
+(story ifid)    B041700C-1DB6-47C9-83A0-797E8A9C0F73
+(story release 1)
+
+(intro)         Man, that was a good nap!  You've been having a lot of trouble sleeping lately, and it would be safe to
+                say you haven't been your usual healthy self.  Even your friends have mentioned that you've
+                been looking worn down.  But you were finally able to get some sleep!
+                (par)
+                 But how long have you been out? And what time is it anyway? You've got that disorienting feeling when
+                 you've just woken up from a deep sleep and you're not sure if it's still the evening or the next morning.
+                 Whatever time it is, it's totally pitch black.  It's much darker than usual.  There are no street lights
+                 and no dim LEDs from electronics.  It's also dead quiet.  And what is that smell?
+                (banner)
+                (try [look])
+
+#casket
+(room *)
+(name *)		small box
+(dict *)    coffin casket
+(look *)
+    (if)(#opening is revealed)(then)
+        You are in what you've now come to realize is your casket. You've managed to create an opening in the top of it,
+        and there's a small tunnel leading upward.  Dirt and splinters of wood are all around you.
+    (else)
+     You're in a small box just large enough to fit your body!
+     There are only a few inches to spare in each direction beyond your head, feet, and shoulders.
+     The walls are made of knotty pine and smell like fresh lacquer. You're resting on
+     a red silk cushion.
+         (if)~(* first viewed)(then)
+            (par)You feel your pulse start to quicken as you begin to understand your predicament.
+            You fight back the urge to outright panic.
+            (now) (* first viewed)
+         (endif)
+    (endif)
+(inherently dark *)
+~(* have seen)
+
+(narrate darkness)
+    (select)
+        You strain your eyes, but you can't see anything.  You need to find a source of light before you can do
+        much of anything.
+    (or)
+        You still can't see anything.  You should look around for another light source or maybe look at what you are carrying?
+    (or)
+        You still can't see anything.  Try typing 'inventory'.
+    (stopping)
+#wall
+(name *)        pine wall
+(descr *)		The walls are made of a sanded knotty pine and covered with a fresh lacquer.  Cracks are forming
+                at the top panel right above your head, and it's bowing in slightly.
+(* is #in #casket)
+(dict *) panel wood knotty lacquer walls
+~(have attacked *)
+(perform [smell *])
+    The "new car" smell is coming from the walls. Most dominant is the acrid smell of lacquer, but behind
+    that, you smell fresh pine.  And just barely... a slight earthy smell.
+(perform [feel *])
+    The walls to your sides feel smooth to the touch.
+(perform [push *])
+    You push the top panel where it's bowing out.  The wood gives and a little bit of dirt spills out between the cracks.
+(perform [knock *])
+    You knock on the wall. The sound is very deadened, and no one comes to help.
+(heads *)	wall
+(add * to scope)
+(instead of [attack *])
+    (if)~(have attacked *)(then)
+        You inspect the walls and see cracks forming at the top panel.
+        (now) (have attacked *)
+    (endif)
+    (try [attack #cracks])
+(instead of [attack * with $Obj])
+    (if)~(have attacked *)(then)
+        You inspect the walls and see cracks forming at the top panel.
+        (now) (have attacked *)
+    (endif)
+    (try [attack #cracks with $Obj])
+
+#flowers
+(name *)        bouquet of flowers
+(item *)
+(plural *)
+(descr *)
+        (if)(player can see *)(then)
+            A bouquet of white aromatic flowers.  What are those, lilies?
+        (else)
+            You can smell flowers, but you can see them.
+        (endif)
+(* is #in #casket)
+(perform [smell *])
+    They have a subtle clove like scent.
+(perform [feel *])
+    The soft petals are delicate to the touch.
+(dict *) lily petals lilies bouquet white flower flowers
+
+
+#cracks
+(name *)    cracks
+(plural *)
+(dict *)    crack bowing
+(descr *)   Small cracks are forming on the top of the box. The entire top section of the box is bowing in.  There must
+            be a lot of pressure above you.
+(* is #partof #wall)
+(instead of [attack *])
+    (select)
+        (now) (have attacked #wall)
+        You punch your fist against the cracks.  You hear a slight creaking sound, and a few specks of dirt drop through them
+        (if)(#handkerchief is #wornby #player)(then)
+            but your handkerchief keeps them out of your mouth.
+        (else)
+            , landing on your face.
+        (endif)
+    (or)
+      You punch even harder and whence in pain as blood drips from your knuckles.  The cracks start to get more prominent, and even more dirt comes out
+      (if)(#handkerchief is #wornby #player)(then)
+          .
+      (else)
+          , covering your face and filling your mouth.
+      (endif)
+    (or)
+        You slam your fist against the cracks, ignoring the pain as blood drips down your hands and into your eyes.
+        But these damn cracks don't seem to be budging!
+    (or)
+        Your fists are bloodied and torn up, and using them seems to be having diminishing returns.  You might need
+        to find something else to hit with.
+    (or)
+        You just can't keep that up.  You need to find another way.
+    (stopping)
+
+(instead of [attack * with #cellphone])
+    The phone won't provide a lot of addition force.  Plus you don't want to destroy your one light source.
+
+(instead of [attack * with #flowers])
+    You smack the cracks with the flowers but just manage to get a bunch of pollen and dirt in your face.
+
+(grammar [kick [single]] for [kick $])
+(instead of [kick *])
+    The cracks are right above your head.  You can't work your feet around to do that.
+(instead of [kick #wall])
+    You kick the walls of the box with your feet, but they feel too sturdy.  You do notice some cracks in the panel right above your head.
+(instead of [kick $Obj])
+    (try [attack $Obj])
+(before [attack #wall with #shoes])
+    (try [attack #cracks with #shoes])
+
+(before [attack * with #shoes])
+    (if)~(#shoes is #heldby #player)(then)
+        (if)(#shoes is #wornby #player)(then)
+            You need to take of your shoes first.
+        (else)
+            You aren't holding your shoes.
+        (endif)
+    (else)
+        (now) (have attacked #wall)
+        (if)(#handkerchief is #wornby #player)(then)
+            (select)
+                You smash the cracks hard with the heel of your shoe.  They get dramatically larger, and dirt starts
+                to cascade down into the box. Your handkerchief manages to keep most of the soil out of your nose and mouth.
+            (or)
+                You strike again, even harder this time.  The cracks start splintering.  It may just take another hit
+                or two.
+            (or)
+                You give a final hard smash, and that does the job.  A large section of the top panel caves in, with
+                splitters of wood going everywhere and dirt starting to fill in around you. Several large chunks of wood
+                narrowly avoid your face and land in the dirt.
+                (par)There's now an opening in the top panel, with a small tunnel forming above it.
+                (now) (#cracks are nowhere)
+                (now) (#splinters is #in #casket)
+                (now) (#stake is #in #casket)
+                (now) (#opening is revealed)
+                (now) (#tunnel is revealed)
+            (stopping)
+        (else)
+            (select)
+                You smash the cracks hard with the heel of your shoe.  They get dramatically bigger, but so much dirt
+                starts cascading out of the cracks and into your nose and mouth that you are having a hard time breathing.
+            (or)
+                If you continue, you're going to suffocate from the dirt.
+            (stopping)
+        (endif)
+    (endif)
+    (stop)
+
+#cushion
+(name *)        silk cushion
+(descr *)		The cushion is embroidered red silk with an elegant paisley pattern.
+(* is #in #casket)
+(perform [smell *])
+    It mostly smells like nothing.  Maybe the slightest sent of perfume.
+(perform [feel *])
+    It's soft and plush, with the smoothness of silk.
+(add * to scope)
+(before [take *])
+    The cushion is attached to the bottom of the box.
+    (stop)
+
+#cellphone
+(item *)
+(name *)		cell phone (* is on) \(providing light\)
+(descr *)		It's your fancy new phone you just bought last month.  It has all the bells and whistles, including
+                \(luckily\) a flashlight function. (if)(* is on)(then) There are no bars of service, unfortunately.(endif)
+(dict *) flashlight mobile
+(* provides light) (* is on)
+(switchable *)
+(* is off)
+(* is #heldby #player)
+(narrate switching on *)
+    You manage to fumble with your phone in the darkness and turn on the flashlight function, illuminating your
+    surroundings.
+    (par)
+    (look #casket)
+
+(perform [smell])
+    You draw in a breath and smell a variety of unfamiliar odors.  A sweet smell of flowers mixed with freshly
+    pressed clothes, and what could best be best described as a "new car smell." But beyond that, you smell something
+    else... you can't quite place it.
+
+(perform [listen])
+    Man it's dead quiet. Not a single peep from a single living creature.
+
+(grammar [feel] for itself)
+(perform [feel])
+    You feel around a bit to get familiar with your surroundings. Below you, you feel a soft cushion, with the
+    smoothness of silk.  Your hands explore more but quickly hit a hard surface.  You feel that same surface in
+    every direction!  You seem to be in a very small space!
+
+
+#jacket
+(item *)
+(name *)		freshly pressed suit jacket
+(descr *)		This is your fancy wool suit jacket that you only bring out for weddings and special occasions. You don't remember
+                putting it on.  There's a perfectly folded handkerchief in the breast pocket.
+(* is #wornby #player)
+(instead of [remove *])
+    The quarters are far too tight to try taking off your jacket.
+(dict *) wool clothes clothing
+(heads *) jacket
+(perform [smell *])
+    It has the smell of starch and dry cleaning.
+
+
+#pants
+(item *)
+(plural *)
+(pair *)
+(name *)		freshly pressed slacks
+(descr *)		These are your fancy wool suit pants you only bring out for weddings and special occasions. You don't remember
+                putting them on.
+(* is #wornby #player)
+(instead of [remove *])
+    The quarters are far too tight to try taking off your pants.  Plus, why on earth would you want to do that?
+(dict *) wool pants
+
+#shoes
+(item *)
+(pair *)
+(wearable *)
+(plural *)
+(name *)		dress shoes
+(dict *)        shoe sole soles italian leather
+(descr *)		These are your extra fancy dress shoes made from supple Italian leather, with hard leather soles. They
+                look nice but are very uncomfortable.
+(instead of [wear *])
+    There's no room to get them back on again.
+
+(* is #wornby #player)
+(instead of [remove *])
+    You manage to get your toes under your heels and kick off both of your shoes.
+    (current room $Room)
+    (now) (* is #in $Room)
+    (now) ~(* is pristine)
+(before [take *])
+    (if)(* is #wornby #player)(then)
+        You need to take them off first.
+        (stop)
+    (endif)
+    (if)~(* at hands)(then)
+        With some wriggling of your feet, you manage to grab hold of your shoes.
+        (now)(* at hands)
+        (now)(* is #heldby #player)
+    (else)
+        You grab your shoes.
+        (now)(* is #heldby #player)
+    (endif)
+    (stop)
+
+
+#pocket
+(item *)
+(name *)		jacket pocket
+(container *)
+(heads *)       pocket
+(descr *)		It's the jacket pocket of your suit, really only good for holding your handkerchief.
+(* is #partof #jacket)
+(dict *)        breast
+(* is in scope)
+
+#handkerchief
+(item *)
+(name *)		handkerchief (* is #wornby #player) \(covering your mouth and nose\)
+(descr *)
+    (if)(player can see *)(then)
+        It's a well-pressed white handkerchief.  Based on its mint condition, it has obviously never been used.
+    (else)
+        It feels well-pressed and neatly folded, as if it has never been used.
+    (endif)
+(wearable *)
+(* is #in #pocket)
+(dict *) napkin hanky tissue snot rag
+(* is in scope)
+(narrate wearing *)
+    You tie the handkerchief around your head, covering your mouth and nose.
+(instead of [tie * to #player])
+    (try [wear *])
+    (stop)
+
+#player
+(current player *)
+(* is #in #casket)
+(descr *)  You're a \(usually\) healthy, happy man in your thirties who maybe is a little sleep deprived.  But who isn't these days? Right?
+(narrate failing to leave $ $)
+    (if)~(player can see )(then)
+    It's pitch black.  You don't want to stumble around in the darkness.
+    (else)
+        (if)(#player is #in #casket)(then)
+            There's just solid pine in that direction.
+        (else)
+            You can't go in that direction.
+        (endif)
+    (endif)
+
+#hands
+(plural *)
+(name *)       your hands
+(descr *)      You know them like the back of your... you know.
+(* is #partof #player)
+
+#splinters
+(plural *)
+(name *)		mix of splinters and dirt
+(descr *)       Splinters of wood mixed with dirt are all around. (if)(#stake is pristine)(then)Among them, you see one wood stake that is a bit
+                bigger than the rest.(endif)
+(heads *)       splinters dirt
+
+#stake
+(item *)
+(name *)		wooden stake
+(descr *)
+    (if)(* is pristine)(then)
+        Among the dirt and wood splitters you spot a particularly intact wooden stake.
+    (else)
+        The chunk of wood is about a foot long with a very sharp end.
+    (endif)
+(dict *)        wood chunks chunk
+(heads *)       wood
+(instead of [drop *])
+    You decide you may need the stake later, so you hold on to it.
+(instead of [put * #in #pocket])
+    You aren't able to fit the stake into your jacket pocket.
+
+#opening
+(name *)    opening
+(descr *)    There's a good size opening in the top of the casket.  You can probably mange to just squeeze through.
+(* is #partof #wall)
+(* is hidden)
+(dict *)    hole tunnel
+(instead of [enter *])
+    (try [enter #tunnel])
+(instead of [go through *])
+    (try [enter #tunnel])
+
+#tunnel
+(room *)
+(name *)		tunnel
+(look *)		You're in a very narrow tunnel with just enough room to fit.  Fresh dirt is around you on all sides.
+                The casket below you is now entirely filled with dirt. (if)(#grave dug out)(then) You've manage to open up a hole
+                above you where you should be able to wriggle out.(endif)
+
+(from #casket go #up to #tunnel)
+(from #tunnel go #down to #casket)
+~(* dug out)
+(* is hidden)
+(prevent entering #tunnel)
+    (if)(* is hidden)(then)
+        (narrate failing to leave #casket #up)
+    (else)
+        (if)~(* dug out)(then)
+            There isn't quite enough room to work your way up to the hole yet.  You need to dig out some more dirt.
+        (else)
+            (fail)
+        (endif)
+    (endif)
+
+(prevent entering #casket)
+    So much dirt has collapsed into the casket that there's no going back that way.  Plus why ever would you want to?
+
+(narrate leaving #casket #up)
+	You contort your body to make it through the opening in the casket. Pulling yourself up by the edges of the hole,
+	you worm your way into the tunnel.  There's so
+	little room that you can barely move your hands.  As you climb, dirt cascades all around you, getting into your eyes.
+
+#moredirt
+(name *)    dirt
+(desr *)    There's dirt all around you in every direction.
+(* is #in #tunnel)
+
+#grave
+(room *)
+(name *)    grave site
+(look *)    Your grave site.
+(from #tunnel go #up to #grave)
+~(* dug out)
+(* is hidden)
+(prevent entering #grave)
+    (if)~(* dug out)(then)
+        There's just a wall of dirt above you. Your only hope is to keep digging.
+    (else)
+        (fail)
+    (endif)
+
+(narrate leaving #tunnel #up)
+    By the sheer force of will, you manage to pull yourself up out of the grave, writhing through the freshly disturbed
+    soil, and collapse on the ground from exhaustion.  In front of you, you see a headstone
+    with your name on it.  "How often do people ever get to see their headstones," you wonder. "And what the hell happened?"
+    (par)
+    Press any key...
+    (get key $)
+    (par)
+    You're so exhausted that you fail to notice the man and woman paying their respects just two graves sites away.
+    They are watching you in utter horror, mouths agog, unable to speak. The woman manages to work up the courage
+    to scream. "Zombie!!!!" she shrieks at the top of her lungs, looking at her husband while pointing at you.
+    (par)
+    Her husband, being much better at chivalry than critical thinking, comes to her rescue.  He runs
+    up to where you're collapsed on the ground. Before you can say anything, he snatches the wooden stake out of your hand
+    and wields it like a sword over his head. "Die zombie!" he screams while plunging it directly into your chest.
+    (par)
+    Press any key...
+    (get key $)
+    (par)
+    As you feel your life force leaving your body, you don't have visions of the afterlife or have any deep intuitions.
+    You don't see your life flash before your eyes, and there are no last-minute revelations.  The only thought that
+    enters your mind is how stupid that man was.  Not because he killed an innocent man without asking any question. But
+    because he doesn't even know the correct way to kill mythical creatures.  Everyone knows wooden stakes are for
+    killing vampires, not zombies. And that's the last thought you have on this earth.
+    (par)
+    THE END
+    (par)
+    (game over)
+
+(perform [stand])
+    There isn't room to do that.
+
+(perform [shout])
+    You shout at the top of your lungs but silence is the only reply.
+
+(grammar [panic] for itself)
+(perform [panic])
+    You start to panic, screaming and kicking.  But you soon realize doing so will just use up your air more quickly.
+
+(grammar [take a deep breath] for [breathe])
+(grammar [breathe] for itself)
+(perform [breathe])
+    You take a deep breath to try to calm yourself down, but then realize you shouldn't be taking lots of deep breaths.
+
+(grammar [stake [object]] for [stake $])
+(perform [stake #player])
+    You aren't a vampire! \(As far as you know.\)
+(perform [stake $])
+    Getting a little stabby aren't you, Van Helsing?
+
+(grammar [rot/decompose/fester/die] for [rot])
+(perform [rot])
+    You can't just wait around to die!  Do something!
+
+(grammar [wriggle] for [go #up])
+
+(grammar [call/dial/ring [topic]] for [call $])
+
+(perform [call $Topic])
+	(try [call $Topic with #cellphone])
+
+(grammar [call] for itself)
+(perform [call])
+    (try [call 911 with #cellphone])
+
+(grammar [call/dial/ring [topic] with [single held]] for [call $ with $])
+(perform [call $ with #cellphone])
+    (select)
+       As you start to dial, you notice you don't have any cell service.  In terms of making phone calls,
+       the phone is worthless.
+    (or)
+        Still no cell service.
+     (stopping)
+(perform [call $ with $])
+    You can't call anybody with that.
+
+(grammar [dig with [single held]] for [dig with $])
+(perform [dig with $Obj])
+    (current room #casket)
+    (try [dig #opening with $Obj])
+
+(perform [dig with $Obj])
+    (current room #tunnel)
+	(try [dig #moredirt with $Obj])
+
+(grammar [dig [object]] for [dig $])
+
+(perform [dig $Obj])
+	What do you want to dig with?
+	(asking for object in [dig $Obj with []])
+
+(grammar [dig] for itself)
+(perform [dig])
+    (current room #casket)
+	(try [dig #opening])
+
+(perform [dig])
+	(current room #tunnel)
+	(try [dig #moredirt])
+
+
+(grammar [dig [object] with [single held]] for [dig $ with $])
+
+(perform [dig #moredirt with #stake])
+    (if)(#grave dug out)(then)
+        You see the opening above you.  You just need to go up.
+    (else)
+        You keep prodding at the dirt above you.  As dirt cascades down, you manage to push it below you and
+         use each bit as leverage to move another inch higher.
+         (par)
+         After what felt like an eternity, you finally see the glorious sight of the open sky above you, and
+          you breath in the sweet smell of fresh air.
+        (now)(#grave dug out)
+        (now)(#grave is revealed)
+    (endif)
+(perform [dig #opening/#splinters with #stake])
+    The sharp end of the stake makes quick work of the soil.  As you dig,
+    more and more dirt starts cascading around you filling up most of the casket.
+    The tunnel above is now much larger, perhaps to the point where you might be able to wriggle your way
+    up there.
+    (now)(#tunnel dug out)
+    (now) (#tunnel is revealed)
+
+(perform [dig #opening/#splinters/#moredirt with #hands])
+    (if)(#tunnel is revealed)(then)
+        (select)
+            You try digging with your bare hands, but your nails start breaking and bleeding very quickly.
+        (or)
+            Your nails are ripped to shreds, and it's just too painful to continue.  You need a better tool.
+        (stopping)
+    (else)
+        There's nowhere to dig.
+    (endif)
+
+
+(perform [dig #opening/#splinters/#moredirt with $Obj])
+    (if)(#opening is revealed)(then)
+        You manage to dislodge a little dirt, but (name $Obj) (is $Obj) just not sharp enough to make any good headway.
+    (else)
+        There's nowhere to dig.
+    (endif)
+
+
+(grammar [cover mouth/face with [object]] for [wear $])
+(grammar [tie [object] to head/face/mouth] for [wear $])
+(grammar [tie [object] on head/face/mouth] for [wear $])
+(grammar [put [object] on head/face/mouth] for [wear $])
+
+(instead of [attack #cracks with $obj])
+    Hitting the cracks with (name $obj) is going to do nothing .
+    (stop)
+
+(grammar [knock] for itself)
+(perform [knock])
+    (try [knock #wall])
+(grammar [knock on [object]] for [knock $])
+
+(grammar [go through [object]] for [go through $])
+
+(grammar [help] for itself)
+(perform [help])
+    This is a parser based game which expect you to type commands to progress the story.  (par)
+    It's always a good idea to 'look' or 'l' at a room and read the room descriptions carefully. (par)
+    You should 'examine <item>' or 'x <item>' where <item> is anything that's been described in a scene. That can often give clues about what to do next.(par)
+    You can see what you are carrying by typing 'inventory' or 'i'.(par)
+    If there are exits described in the room, you can navigate by typing 'go <direction>', or just '<direction>'.(par)
+    Feel free to try things and experiment.  If you ever do something you didn't want to do, you can always 'undo'.
+    (par)
+    Good luck and have fun!
+
+(grammar [about] for itself)
+(perform [about])
+    The Long Nap by Paul Michael Winters(par)
+    A "La Petite Mort" entry, created in just 4 hours.(line)
+    Thanks to Mike Russo, Tyler Ross and Nick Laken for beta testing.(line)
+    Type help for general help.
+    (par)
+    Please Enjoy!
