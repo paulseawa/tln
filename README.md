@@ -1,6 +1,7 @@
 # The Long Nap
 
-This is my Le Petit Morte [entry](https://paulseawa.itch.io/the-long-nap) for [Ectocomp 2020](https://itch.io/jam/ectocomp-2020-english).  
+This is my La Petite Mort [entry](https://paulseawa.itch.io/the-long-nap) for [Ectocomp 2020](https://itch.io/jam/ectocomp-2020-english). 
+ 
 This game was written in four hours, per the requirements of the contest, however the latest version of 
 this source code has a couple bug fixes in it that were reported by players.
 
